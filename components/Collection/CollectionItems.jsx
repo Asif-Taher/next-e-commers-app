@@ -9,38 +9,34 @@ import Link from 'next/link';
 
 export default function CollectionItems() {
 
-  const { products, search, showSearch } = useContext(context)
+  const { products, search, showSearch } = useContext(context);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProduct] = useState([]);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
-  const [sortType, setSortType] = useState('relavent')
+  const [sortType, setSortType] = useState('relavent');
 
-  //ToggleCategory function 
+  // Toggle Category function 
   const toggleCategory = (e) => {
-    if (category.includes(e.target.value)) {
-      setCategory(prev => prev.filter(item => item !== e.target.value))
-    }
-    else {
-      setCategory(prev => [...prev, e.target.value]);
+    const value = e.target.value.toLowerCase(); // Normalize the value to lowercase
+    if (category.includes(value)) {
+      setCategory(prev => prev.filter(item => item !== value))
+    } else {
+      setCategory(prev => [...prev, value]);
     }
   }
 
-
-  // toggleSubCategory Function
-
+  // Toggle SubCategory Function
   const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(prev => prev.filter(item => item !== e.target.value))
-    }
-    else {
-      setSubCategory(prev => [...prev, e.target.value])
+    const value = e.target.value.toLowerCase(); // Normalize the value to lowercase
+    if (subCategory.includes(value)) {
+      setSubCategory(prev => prev.filter(item => item !== value))
+    } else {
+      setSubCategory(prev => [...prev, value])
     }
   }
-  //useEffect for setFilterProducts
 
-  //applyFilter function for  lilter the error element
-
+  // Apply Filter function
   const applyFilter = () => {
     let productsCopy = products.slice();
 
@@ -50,59 +46,58 @@ export default function CollectionItems() {
       );
     }
 
+    console.log("Selected categories: ", category); // Debugging
+
     if (category.length > 0) {
       productsCopy = productsCopy.filter(item =>
-        category.includes(item.category)
+        category.includes(item.category.toLowerCase()) // Compare with normalized category
       );
     }
 
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter(item =>
-        subCategory.includes(item.subCategory)
+        subCategory.includes(item.subCategory.toLowerCase()) // Compare with normalized subCategory
       );
     }
 
+    console.log("Filtered products: ", productsCopy); // Debugging
     setFilterProduct(productsCopy);
   }
 
-
-  // use function for selection price for sort product  box
-
+  // Sort Products function
   const sortProduct = () => {
     let fpCopy = filterProducts.slice();
     switch (sortType) {
       case 'low-high':
-        setFilterProduct(fpCopy.sort((a, b) => (a.price - b.price)));
+        setFilterProduct(fpCopy.sort((a, b) => a.price - b.price));
         break;
       case 'high-low':
-        setFilterProduct(fpCopy.sort((a, b) => (b.price - a.price)));
+        setFilterProduct(fpCopy.sort((a, b) => b.price - a.price));
         break;
-
       default:
         applyFilter();
         break;
-
     }
   }
-  useEffect(() => {
-    applyFilter();
-  }, [category, subCategory, search, showSearch])
-
-  //for sortType 
 
   useEffect(() => {
-    sortProduct();
-  }, [sortType])
+    applyFilter(); // Reapply filter whenever search, category, or subcategory changes
+  }, [category, subCategory, search, showSearch]);
+
+  useEffect(() => {
+    sortProduct(); // Sort products whenever sortType changes
+  }, [sortType]);
 
   return (
     <div>
       <div className='mx-10 flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
         {/* Filters Options  */}
-        <div className='min-w-60 '>
-          <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl flex items-center cursor-pointer gap-2'>FILTERS
+        <div className='min-w-60'>
+          <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl flex items-center cursor-pointer gap-2'>
+            FILTERS
             <Image className={`h-3 w-3 sm:hidden ${showFilter ? "rotate-90" : ""}`} src={assets.dropdown_icon} alt='' />
           </p>   
-          {/* Categroy filter */}
+          {/* Category filter */}
           <div className={`border border-gray-300 pl-5 py-3 mt-6  sm:block ${showFilter ? "" : "hidden"}`}>
             <p className='mb-3 text-sm font-medium'>CATEGORIES</p>
             <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
@@ -117,7 +112,7 @@ export default function CollectionItems() {
               </p>
             </div>
           </div>
-          {/* SubCategroy filter */}
+          {/* SubCategory filter */}
           <div className={`border border-gray-300 pl-5 py-3 mt-6  sm:block ${showFilter ? "" : "hidden"}`}>
             <p className='mb-3 text-sm font-medium'>TYPE</p>
             <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
@@ -144,12 +139,12 @@ export default function CollectionItems() {
               <option value="high-low"> High to Low</option>
             </select>
           </div>
-          {/* map products */}
+          {/* Map products */}
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3'>
             {
-              products.map((item, index) => (  
-                <Link href={`/product/${item._id}`}>
-                        <ProductItem key={index} item={item} />                     
+              filterProducts.map((item, index) => (  
+                <Link href={`/product/${item._id}`} key={index}>
+                  <ProductItem item={item} />                     
                 </Link>      
               ))
             }
@@ -157,5 +152,5 @@ export default function CollectionItems() {
         </div>
       </div>
     </div>
-  )
+  );
 }
