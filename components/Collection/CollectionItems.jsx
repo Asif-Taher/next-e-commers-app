@@ -46,8 +46,6 @@ export default function CollectionItems() {
       );
     }
 
-    console.log("Selected categories: ", category); // Debugging
-
     if (category.length > 0) {
       productsCopy = productsCopy.filter(item =>
         category.includes(item.category.toLowerCase()) // Compare with normalized category
@@ -59,8 +57,6 @@ export default function CollectionItems() {
         subCategory.includes(item.subCategory.toLowerCase()) // Compare with normalized subCategory
       );
     }
-
-    console.log("Filtered products: ", productsCopy); // Debugging
     setFilterProduct(productsCopy);
   }
 
