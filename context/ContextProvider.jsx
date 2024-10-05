@@ -1,6 +1,7 @@
 'use client'
 import React, {createContext, useEffect, useState } from 'react'
 import { products } from '@/public/assets/frontend_assets/assets'
+import { useRouter } from 'next/navigation';
 
 export const context = createContext()
 const  ContextProvider = ({children}) => {
@@ -9,11 +10,12 @@ const  ContextProvider = ({children}) => {
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false)
   const [cartItems,setCartItem] = useState({});
+  const router = useRouter()
 
   const addToCart = async (itemId, size) => {
     // Clone the existing cart data
     const cartData = { ...cartItems };  // Shallow clone since we'll handle nested objects manually
-  
+
     // Check if the item exists in the cart
     if (!cartData[itemId]) {
       // If item doesn't exist, create an object for the item
@@ -33,11 +35,6 @@ const  ContextProvider = ({children}) => {
     setCartItem(cartData);
   };
   
-
-  useEffect(()=>{
-  },[cartItems])
-// cart cunt function
-
   const getCartCount  = () =>{
     let totalCount = 0;
     for(const items in cartItems){
@@ -54,6 +51,26 @@ const  ContextProvider = ({children}) => {
     return totalCount;
   }
 
+  // getCartAmount function
+
+  const getCartAmount = () =>{
+    let totalAmount = 0;
+    for(const items in cartItems){
+      let itemInfo = products.find((product) => product._id === items);
+      for(const item in cartItems[items]){
+        try {
+          if(cartItems[items][item] > 0){
+            totalAmount += itemInfo.price * cartItems[items][item];
+          }
+        } catch (error) {
+          
+        }
+      }
+    }
+    return totalAmount;
+  }
+
+
   const updateQuantity = async (itemId, size, quantity)=>{
     let cartData = {...cartItems};
     cartData[itemId][size] = quantity;
@@ -61,7 +78,7 @@ const  ContextProvider = ({children}) => {
   }
     const info = {
        products,currency,delivery_fee,search,setSearch,showSearch,setShowSearch,
-        cartItems, addToCart,getCartCount,updateQuantity
+        cartItems, addToCart,getCartCount,updateQuantity,getCartAmount,router
     }
   return (
     <context.Provider value={info}>

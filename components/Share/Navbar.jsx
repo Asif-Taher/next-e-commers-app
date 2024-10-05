@@ -15,7 +15,6 @@ export default function Navbar() {
   // menu click function is call here
 
   const MenuClick = (e) => {
-    console.log('image is click')
     setVisible(!visible);
 
   }
