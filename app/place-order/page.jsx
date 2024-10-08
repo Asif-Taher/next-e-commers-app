@@ -48,12 +48,12 @@ export default function page() {
           <div>
             <CartTotal />
           </div>
-          <div className='ml-[5.75rem] mt-4'>
+          <div className='ml-[5.75rem] mt-10'>
             <div>
               <Title text1={"PAYMENT"} text2={"METHOD"} />
             </div>
             {/* Payment method secton */}
-            <div className='flex gap-4'>
+            <div className='flex flex-col sm:flex-row gap-4'>
               <div onClick={() => setMethod("stripe")} className='flex items-center gap-3 border p-2 px-3 cursor-pointer rounded-sm'>
                 <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'stripe' ? "bg-green-500" : ""}`}></p>
                 <Image className='h-5 mx-5' src={assets.stripe_logo} alt='stripe' />

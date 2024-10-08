@@ -56,7 +56,10 @@ export default function Navbar() {
         <div className='flex items-center gap-5'>
           <Image onClick={() => setShowSearch(true)} src={searchIcon} width={25} height={25} alt='' className='cursor-pointer' />
           <div className='group relative'>
+
+            <Link href="/login">
             <Image src={profileIcon} width={25} height={25} alt='profile image' className='cursor-pointer' />
+            </Link>
             <div className='absolute right-0 pt-4  transition-all duration-500 hidden text-black group-hover:block'>
               <div className='bg-slate-100 w-36 p-4 flex flex-col gap-3 rounded-lg'>
                 <p className='cursor-pointer hover:text-gray-400'>My Profile</p>
