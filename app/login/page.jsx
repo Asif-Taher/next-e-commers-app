@@ -1,9 +1,10 @@
+import Login from '@/components/Login/Login'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-        <p>This is login page</p>
+        <Login />
     </div>
   )
 }

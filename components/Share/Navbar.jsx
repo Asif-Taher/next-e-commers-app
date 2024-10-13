@@ -53,7 +53,7 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <div className='flex items-center gap-5'>
+        <div className='flex items-center gap-2'>
           <Image onClick={() => setShowSearch(true)} src={searchIcon} width={25} height={25} alt='' className='cursor-pointer' />
           <div className='group relative'>
 
